@@ -23,6 +23,7 @@ id_checklist
 ### Tabla comentario
 id
 detalle
+fecha_realizado
 id_tarea     // en que tarea se realizo el comentario 
 id_usuario   // y que usuario de todos los que pueden hacer la tarea realizo un comentario en la misma
 
@@ -32,7 +33,7 @@ nombre
 apellido
 
 ### Tabla tarea_users
-id
+id_tarea_users
 id_tarea
 id_usuario
 
@@ -45,30 +46,32 @@ create database `proyecto_noelia`;
 
 // creo las tablas
 CREATE TABLE `tarea` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tarea` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `inicio` datetime NOT NULL,
   `estimacion` int(11),
   `consumo` float(8,2) DEFAULT '0.00',
   `fin` datetime NOT NULL,
   `estado` varchar(50) NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id_tarea`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `usuario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `apellido` varchar(50) NOT NULL,
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id_usuario`),
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `comentario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_comentario` int(11) NOT NULL AUTO_INCREMENT,
   `detalle` varchar(50) NOT NULL,
   `fecha_realizado` datetime NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`id`), // de tarea 
-    FOREIGN KEY (`id`) // de usuario porque multiples usuarios pueden hacer las tareas
+  `id_usuario` int(11) NOT NULL,
+  `id_tarea` int(11) NOT NULL,
+    PRIMARY KEY (`id_comentario`),
+    FOREIGN KEY (`id_tarea`) references tarea(`id_tarea`) on delete cascade, // de tarea 
+    FOREIGN KEY (`id_usuario` references usuario (`id_usuario`) on delete cascade // de usuario porque multiples usuarios pueden hacer las tareas
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `consignas_de_checklist` (
@@ -85,12 +88,6 @@ CREATE TABLE `checklist` (
     PRIMARY KEY (`id`),
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `usuario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
-  `apellido` varchar(50) NOT NULL,
-    PRIMARY KEY (`id`),
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `tarea_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
