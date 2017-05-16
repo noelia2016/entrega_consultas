@@ -1,6 +1,6 @@
 /*************************** ESTRUCTURA DE TABLAS ************************************/
 ### Tabla tarea
-id
+id_tarea
 nombre
 inicio (fecha de inicio de la tarea)
 estimacion (tiempo en horas que tarda en hacerlo)
@@ -8,27 +8,23 @@ consumo
 fin (fecha de finalizada la tarea)
 estado (pendiente, en curso y finalizada)
 
-### Tabla checklist
-id
-nombre
-id_tarea
-
-### consignas_de_checklist
+### consignas
 id
 detalle
 fecha_realizado
 estado (pendiente, hecho)
-id_checklist
+id_tarea
+### Tabla usuario
+id_usuario
 
 ### Tabla comentario
-id
+id_comentario
 detalle
-fecha_realizado
 id_tarea     // en que tarea se realizo el comentario 
 id_usuario   // y que usuario de todos los que pueden hacer la tarea realizo un comentario en la misma
 
 ### Tabla usuario
-id
+id_usuario
 nombre
 apellido
 
@@ -49,7 +45,7 @@ CREATE TABLE `tarea` (
   `id_tarea` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `inicio` datetime NOT NULL,
-  `estimacion` int(11),
+  `estimacion` float(8,2) DEFAULT '0.00',
   `consumo` float(8,2) DEFAULT '0.00',
   `fin` datetime NOT NULL,
   `estado` varchar(50) NOT NULL,
@@ -71,29 +67,27 @@ CREATE TABLE `comentario` (
   `id_tarea` int(11) NOT NULL,
     PRIMARY KEY (`id_comentario`),
     FOREIGN KEY (`id_tarea`) references tarea(`id_tarea`) on delete cascade, // de tarea 
-    FOREIGN KEY (`id_usuario` references usuario (`id_usuario`) on delete cascade // de usuario porque multiples usuarios pueden hacer las tareas
+    FOREIGN KEY (`id_usuario`) references usuario (`id_usuario`) on delete cascade // de usuario porque multiples usuarios pueden hacer las tareas
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `consignas_de_checklist` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `consignas` (
+  `id_consignas` int(11) NOT NULL AUTO_INCREMENT,
   `detalle` varchar(50) NOT NULL,
   `fecha_realizado` datetime NOT NULL,
   `estado` varchar(50) NOT NULL,
-    PRIMARY KEY (`id`),
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE `checklist` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
-    PRIMARY KEY (`id`),
+  `id_tarea` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+    PRIMARY KEY (`id_consignas`),
+    FOREIGN KEY (`id_tarea`) references tarea (`id_tarea`) on delete cascade,
+    FOREIGN KEY (`id_usuario`) references usuario (`id_usuario`) on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE `tarea_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id` int(11) NOT NULL,    // de usuario
-  `id` int(11) NOT NULL  // de tarea
-    PRIMARY KEY (`id`)
+  `id_tuser` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(11) NOT NULL,    // de usuario
+  `id_tarea` int(11) NOT NULL  // de tarea
+    PRIMARY KEY (`id_tuser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*************************** FIN DE SENTENCIAS DE LA CREACION DE LAS TABLAS ************************************/
@@ -103,8 +97,7 @@ CREATE TABLE `tarea_users` (
 DROP TABLE `tarea`;
 DROP TABLE `usuario`;
 DROP TABLE `comentarios`;
-DROP TABLE `checklist`;
-DROP TABLE `consignas_de_checklist`;
+DROP TABLE `consignas`;
 DROP TABLE `tarea_users`;
 
 /*************************** FIN DE SENTENCIAS PARA ELIMINAR LAS TABLAS ************************************/
