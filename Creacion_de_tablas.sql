@@ -40,6 +40,8 @@ id_usuario
 // primero creo la base de datos
 create database `proyecto_noelia`;
 
+use proyecto_noelia;
+
 // creo las tablas
 CREATE TABLE `tarea` (
   `id_tarea` int(11) NOT NULL AUTO_INCREMENT,
@@ -56,7 +58,7 @@ CREATE TABLE `usuario` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `apellido` varchar(50) NOT NULL,
-    PRIMARY KEY (`id_usuario`),
+    PRIMARY KEY (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `comentario` (
@@ -66,8 +68,8 @@ CREATE TABLE `comentario` (
   `id_usuario` int(11) NOT NULL,
   `id_tarea` int(11) NOT NULL,
     PRIMARY KEY (`id_comentario`),
-    FOREIGN KEY (`id_tarea`) references tarea(`id_tarea`) on delete cascade, // de tarea 
-    FOREIGN KEY (`id_usuario`) references usuario (`id_usuario`) on delete cascade // de usuario porque multiples usuarios pueden hacer las tareas
+    FOREIGN KEY (`id_tarea`) references tarea(`id_tarea`) on delete cascade, -- de tarea 
+    FOREIGN KEY (`id_usuario`) references usuario (`id_usuario`) on delete cascade -- de usuario porque multiples usuarios pueden hacer las tareas
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `consignas` (
@@ -85,8 +87,8 @@ CREATE TABLE `consignas` (
 
 CREATE TABLE `tarea_users` (
   `id_tuser` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,    // de usuario
-  `id_tarea` int(11) NOT NULL  // de tarea
+  `id_usuario` int(11) NOT NULL,    -- de usuario
+  `id_tarea` int(11) NOT NULL,  -- de tarea
     PRIMARY KEY (`id_tuser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
